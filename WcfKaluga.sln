@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfKaluga", "WcfKaluga\WcfKaluga.csproj", "{A58502A0-9111-4A5C-A822-5EA17F5C26F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfKaluga.Classes", "WcfKaluga.Classes\WcfKaluga.Classes.csproj", "{EFCFE32B-8EE0-4ED6-B1D2-DC8B14068F2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A58502A0-9111-4A5C-A822-5EA17F5C26F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A58502A0-9111-4A5C-A822-5EA17F5C26F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A58502A0-9111-4A5C-A822-5EA17F5C26F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A58502A0-9111-4A5C-A822-5EA17F5C26F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFCFE32B-8EE0-4ED6-B1D2-DC8B14068F2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFCFE32B-8EE0-4ED6-B1D2-DC8B14068F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFCFE32B-8EE0-4ED6-B1D2-DC8B14068F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFCFE32B-8EE0-4ED6-B1D2-DC8B14068F2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
