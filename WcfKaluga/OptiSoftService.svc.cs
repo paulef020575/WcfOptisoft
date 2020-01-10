@@ -36,48 +36,59 @@ namespace WcfKaluga
                     connection.Open();
                     SqlCommand command = new SqlCommand(Queries.GetRollPackId, connection);
                     command.Parameters.AddWithValue("RollPackNum", packNum);
-                    object idResult = command.ExecuteScalar();
 
-                    if (idResult == null || DBNull.Value.Equals(idResult))
-                        return new Result<RollPack> { Message = Messages.PackageNotFound, ResultItem = null };
+                    using (DbDataReader reader = command.ExecuteReader(CommandBehavior.Default))
+                    {
+                        if (reader.Read())
+                        {
+                            rollPack.Diameter = (int) reader["Diameter"];
+                            rollPack.Format = (int) reader["Format"];
+                            rollPack.Layers = (int) reader["Layers"];
+                            rollPack.Massa_m2_gost = (decimal) reader["Massa_m2_gost"];
+                            rollPack.MaterialCode = (string) reader["MaterialCode"];
+                            rollPack.SapStatus = (int) reader["SapStatus"];
+                            rollPack.WeightGross = (DBNull.Value.Equals(reader["WeightGross"]) ? 0m : (decimal)reader["WeightGross"]);
+                            rollPack.WeightNet =  (DBNull.Value.Equals(reader["WeightNet"]) ? 0m : (decimal)reader["WeightNet"]);
+                            rollPack.QualityStatus = ((short)reader["Status"] == 3 ? QualityStatus.Bad : QualityStatus.Good);
 
-                    command = new SqlCommand(Queries.GetRollPackByNum, connection);
-                    command.Parameters.AddWithValue("RollPackNum", packNum);
+                            reader.Close();
+                        }
+                        else
+                        {
+                            reader.Close();
+                            connection.Close();
+                            return new Result<RollPack> { Message = Messages.PackageNotFound, ResultItem = null };
+                        }
+                    }
+                    
+                    SqlCommand command1 = new SqlCommand(Queries.GetRollPackByNum, connection);
+                    command1.Parameters.AddWithValue("RollPackNum", packNum);
 
-                    using (DbDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+                    using (DbDataReader reader = command1.ExecuteReader(CommandBehavior.CloseConnection))
                     {
                         while (reader.Read())
                         {
-                            rollPack.Rolls.Add(new Roll
+                            Roll roll = new Roll
                             {
-                                RollNumber = (string)reader["RollNum"],
-                                Quality = (QualityStatus)reader["QualityStatus"]
-                            });
+                                RollNumber = (string) reader["RollNum"],
+                                Quality = (QualityStatus) reader["QualityStatus"]
+                            };
+
+                            rollPack.Rolls.Add(roll);
+
+                            if (roll.Quality == QualityStatus.Bad)
+                                rollPack.QualityStatus = QualityStatus.Bad;
+                            if (roll.Quality == QualityStatus.None && rollPack.QualityStatus == QualityStatus.Good)
+                                rollPack.QualityStatus = QualityStatus.None;
                         }
 
                         reader.Close();
                     }
-
-                    command = new SqlCommand(Queries.GetPackSapStatus, connection);
-                    command.Parameters.AddWithValue("RollPackNum", packNum);
                 }
-
-                if (rollPack.Rolls.Count(x => x.Quality == QualityStatus.Bad) > 0)
-                    rollPack.QualityStatus = QualityStatus.Bad;
-                else
-                {
-                    if (rollPack.Rolls.Count(x => x.Quality == QualityStatus.None) > 0)
-                        rollPack.QualityStatus = QualityStatus.None;
-                    else
-                    {
-                        rollPack.QualityStatus = QualityStatus.Good;
-                    }
-                }
-
 
                 return new Result<RollPack> { Message = Messages.OK, ResultItem = rollPack };
             }
-            catch (SqlException)
+            catch (SqlException exc)
             {
                 return new Result<RollPack> { Message = Messages.DatabaseError, ResultItem = null };
             }
@@ -163,7 +174,7 @@ namespace WcfKaluga
             }
         }
 
-        public string GetNextRollPackNum()
+        public Result<string> GetNextRollPackNum()
         {
             try
             {
@@ -176,20 +187,20 @@ namespace WcfKaluga
                     connection.Close();
 
                     if (result == null || DBNull.Value.Equals(result))
-                        return Messages.NoPackagesInQueue;
+                        return new Result<string> {Message = Messages.NoPackagesInQueue, ResultItem = ""};
 
-                    return (string)result;
+                    return new Result<string> {Message = "", ResultItem = result.ToString()};
                 }
             }
             catch (SqlException)
             {
-                return Messages.DatabaseError;
+                return new Result<string> {Message = Messages.DatabaseError, ResultItem = ""};
             }
         }
 
-        public string DeleteRollPack(string packNum)
+        public Result<string> DeleteRollPack(string packNum)
         {
-            if (string.IsNullOrEmpty(packNum)) return Messages.ParameterIsEmpty;
+            if (string.IsNullOrEmpty(packNum)) return new Result<string> {Message = Messages.ParameterIsEmpty, ResultItem = ""};
 
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
@@ -202,14 +213,14 @@ namespace WcfKaluga
                     object result = command.ExecuteScalar();
                     connection.Close();
 
-                    if (result == null || DBNull.Value.Equals(result))
-                        return string.Format(Messages.RowsAffected, 0);
+                    if (result == null || DBNull.Value.Equals(result) || (int)result == 0)
+                        return new Result<string> {Message = string.Format(Messages.RowsAffected, 0), ResultItem = ""};
 
-                    return string.Format(Messages.RowsAffected, (int)result);
+                    return new Result<string> { Message = "", ResultItem = result.ToString() };
                 }
                 catch (SqlException ex)
                 {
-                    return Messages.DatabaseError;
+                    return new Result<string> {Message = Messages.DatabaseError, ResultItem = ""};
                 }
             }
         }
@@ -228,7 +239,7 @@ namespace WcfKaluga
                     object result = command.ExecuteScalar();
                     connection.Close();
 
-                    if (result == null || DBNull.Value.Equals(result))
+                    if (result == null || DBNull.Value.Equals(result) || string.IsNullOrEmpty((string)result))
                         return new Result<RollPack> { Message = Messages.PackageNotFound, ResultItem = null };
 
                     return new Result<RollPack> { Message = Messages.OK, ResultItem = new RollPack { RollPackNum = (string)result } };

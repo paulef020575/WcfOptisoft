@@ -10,7 +10,6 @@ namespace WcfKaluga.Classes.Results
 {
     [DataContract]
     public class Result<TResultItem>
-        where TResultItem : IResultItem
     {
         [DataMember]
         public string Message { get; set; }

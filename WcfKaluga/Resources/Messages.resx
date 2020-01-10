@@ -127,7 +127,7 @@
     <value>No packages in queue</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>OK</value>
+    <value />
   </data>
   <data name="PackageNotFound" xml:space="preserve">
     <value>Package not found</value>

@@ -24,10 +24,10 @@ namespace WcfKaluga
         Result<RollPack> UpdateRollPackStatus(string packNum, int sapStatus);
 
         [OperationContract]
-        string GetNextRollPackNum();
+        Result<string> GetNextRollPackNum();
 
         [OperationContract]
-        string DeleteRollPack(string packNum);
+        Result<string> DeleteRollPack(string packNum);
 
         [OperationContract]
         Result<RollPack> GetRollPackNumByRollNum(string rollNum);
