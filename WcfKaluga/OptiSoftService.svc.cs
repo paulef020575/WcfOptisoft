@@ -71,7 +71,9 @@ namespace WcfKaluga
                             Roll roll = new Roll
                             {
                                 RollNumber = (string) reader["RollNum"],
-                                Quality = (QualityStatus) reader["QualityStatus"]
+                                Quality = (QualityStatus) reader["QualityStatus"],
+                                WeightGross = (decimal)reader["WeightGross"],
+                                WeightNet = (decimal)reader["WeightNet"]
                             };
 
                             rollPack.Rolls.Add(roll);

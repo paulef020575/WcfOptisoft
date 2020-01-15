@@ -10,5 +10,11 @@ namespace WcfKaluga.Classes.Items
 
         [DataMember]
         public QualityStatus Quality { get; set; }
+
+        [DataMember]
+        public decimal WeightGross { get; set; }
+
+        [DataMember]
+        public decimal WeightNet { get; set; }
     }
 }
