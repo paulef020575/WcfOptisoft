@@ -115,6 +115,15 @@ namespace WcfKaluga.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EXECUTE PMMES.[WebGetRollPackProperties] @Id.
+        /// </summary>
+        public static string GetRollPackProperties {
+            get {
+                return ResourceManager.GetString("GetRollPackProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EXECUTE PMMES.WebGetLabQualityParamsByRollNums @RollNum.
         /// </summary>
         public static string GetRollQuality {

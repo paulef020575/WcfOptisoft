@@ -34,15 +34,6 @@ namespace WcfKaluga.Classes
         public decimal WeightNet { get; set; }
 
         [DataMember]
-        public decimal Massa_m2_gost { get; set; }
-
-        [DataMember]
-        public int Layers { get; set; }
-
-        [DataMember]
-        public int Format { get; set; }
-
-        [DataMember]
-        public int Diameter { get; set; }
+        public List<Property> Properties { get; set; }
     }
 }

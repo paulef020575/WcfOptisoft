@@ -28,6 +28,7 @@ namespace WcfKaluga
                 return new Result<RollPack> { Message = Messages.ParameterIsEmpty, ResultItem = null};
 
             RollPack rollPack = new RollPack { RollPackNum = packNum, Rolls = new List<Roll>() };
+            long rollPackId = 0;
 
             try
             {
@@ -41,10 +42,7 @@ namespace WcfKaluga
                     {
                         if (reader.Read())
                         {
-                            rollPack.Diameter = (int) reader["Diameter"];
-                            rollPack.Format = (int) reader["Format"];
-                            rollPack.Layers = (int) reader["Layers"];
-                            rollPack.Massa_m2_gost = (decimal) reader["Massa_m2_gost"];
+                            rollPackId = (long) reader["id"];
                             rollPack.MaterialCode = (string) reader["MaterialCode"];
                             rollPack.SapStatus = (int) reader["SapStatus"];
                             rollPack.WeightGross = (DBNull.Value.Equals(reader["WeightGross"]) ? 0m : (decimal)reader["WeightGross"]);
@@ -60,7 +58,25 @@ namespace WcfKaluga
                             return new Result<RollPack> { Message = Messages.PackageNotFound, ResultItem = null };
                         }
                     }
-                    
+
+                    rollPack.Properties = new List<Property>();
+                    SqlCommand command2 = new SqlCommand(Queries.GetRollPackProperties, connection);
+                    command2.Parameters.AddWithValue("Id", rollPackId);
+
+                    using (DbDataReader reader = command2.ExecuteReader(CommandBehavior.Default))
+                    {
+                        while (reader.Read())
+                        {
+                            rollPack.Properties.Add(new Property
+                            {
+                                Code = (string) reader["code"],
+                                Value = (int) reader["value"]
+                            });
+                        }
+
+                        reader.Close();
+                    }
+
                     SqlCommand command1 = new SqlCommand(Queries.GetRollPackByNum, connection);
                     command1.Parameters.AddWithValue("RollPackNum", packNum);
 

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Items\Property.cs" />
     <Compile Include="Items\RollList.cs" />
     <Compile Include="Items\RollQuality.cs" />
     <Compile Include="Results\IResultItem.cs" />

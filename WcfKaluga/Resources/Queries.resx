@@ -135,6 +135,9 @@
   <data name="GetRollPackNumByRollNum" xml:space="preserve">
     <value>EXECUTE PMMES.WebGetRollPackNumByRollNum @RollNum</value>
   </data>
+  <data name="GetRollPackProperties" xml:space="preserve">
+    <value>EXECUTE PMMES.[WebGetRollPackProperties] @Id</value>
+  </data>
   <data name="GetRollQuality" xml:space="preserve">
     <value>EXECUTE PMMES.WebGetLabQualityParamsByRollNums @RollNum</value>
   </data>
