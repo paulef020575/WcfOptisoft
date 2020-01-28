@@ -47,7 +47,8 @@ namespace WcfKaluga
                             rollPack.SapStatus = (int) reader["SapStatus"];
                             rollPack.WeightGross = (DBNull.Value.Equals(reader["WeightGross"]) ? 0m : (decimal)reader["WeightGross"]);
                             rollPack.WeightNet =  (DBNull.Value.Equals(reader["WeightNet"]) ? 0m : (decimal)reader["WeightNet"]);
-                            rollPack.QualityStatus = ((short)reader["Status"] == 3 ? QualityStatus.Bad : QualityStatus.Good);
+                            rollPack.Brutto1 = (DBNull.Value.Equals(reader["Brutto1"]) ? 0m : (int)reader["Brutto1"]);
+                            rollPack.QualityStatus = ((bool)reader["IsWaste"] ? QualityStatus.Bad : QualityStatus.Good);
 
                             reader.Close();
                         }
@@ -70,7 +71,7 @@ namespace WcfKaluga
                             rollPack.Properties.Add(new Property
                             {
                                 Code = (string) reader["code"],
-                                Value = (int) reader["value"]
+                                Value = (string) reader["value"]
                             });
                         }
 
@@ -89,7 +90,8 @@ namespace WcfKaluga
                                 RollNumber = (string) reader["RollNum"],
                                 Quality = (QualityStatus) reader["QualityStatus"],
                                 WeightGross = (decimal)reader["WeightGross"],
-                                WeightNet = (decimal)reader["WeightNet"]
+                                WeightNet = (decimal)reader["WeightNet"],
+                                Brutto1 = (int)reader["Brutto1"]
                             };
 
                             rollPack.Rolls.Add(roll);

@@ -23,6 +23,6 @@ namespace WcfKaluga.Classes.Items
         ///     Значение свойства
         /// </summary>
         [DataMember]
-        public int Value { get; set; }
+        public string Value { get; set; }
     }
 }

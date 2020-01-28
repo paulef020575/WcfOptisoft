@@ -34,6 +34,9 @@ namespace WcfKaluga.Classes
         public decimal WeightNet { get; set; }
 
         [DataMember]
+        public decimal Brutto1 { get; set; }
+
+        [DataMember]
         public List<Property> Properties { get; set; }
     }
 }
