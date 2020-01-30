@@ -95,11 +95,6 @@ namespace WcfKaluga
                             };
 
                             rollPack.Rolls.Add(roll);
-
-                            if (roll.Quality == QualityStatus.Bad)
-                                rollPack.QualityStatus = QualityStatus.Bad;
-                            if (roll.Quality == QualityStatus.None && rollPack.QualityStatus == QualityStatus.Good)
-                                rollPack.QualityStatus = QualityStatus.None;
                         }
 
                         reader.Close();
