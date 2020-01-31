@@ -30,6 +30,6 @@ namespace WcfKaluga
         Result<string> DeleteRollPack(string packNum);
 
         [OperationContract]
-        Result<RollPack> GetRollPackNumByRollNum(string rollNum);
+        Result<string> GetRollPackNumByRollNum(string rollNum);
     }
 }

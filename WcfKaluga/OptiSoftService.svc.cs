@@ -130,12 +130,13 @@ namespace WcfKaluga
                         using (DbDataReader reader = command.ExecuteReader(CommandBehavior.Default))
                         {
                             while (reader.Read())
-                                roll.QualityParams.Add(new QualityParam
-                                {
-                                    Code = (string)reader["Code"],
-                                    Name = (string)reader["Name"],
-                                    Value = (decimal?)(DBNull.Value.Equals(reader["Value"]) ? null : reader["Value"])
-                                });
+                                if (!DBNull.Value.Equals(reader["Value"]))
+                                    roll.QualityParams.Add(new QualityParam
+                                    {
+                                        Code = (string)reader["Code"],
+                                        Name = (string)reader["Name"],
+                                        Value = (decimal?)reader["Value"]
+                                    });
 
                             reader.Close();
                         }
@@ -240,9 +241,9 @@ namespace WcfKaluga
             }
         }
 
-        public Result<RollPack> GetRollPackNumByRollNum(string rollNum)
+        public Result<string> GetRollPackNumByRollNum(string rollNum)
         {
-            if (string.IsNullOrEmpty(rollNum)) return new Result<RollPack> { Message = Messages.ParameterIsEmpty, ResultItem = null};
+            if (string.IsNullOrEmpty(rollNum)) return new Result<string> { Message = Messages.ParameterIsEmpty, ResultItem = string.Empty};
             try
             {
                 using (SqlConnection connection = new SqlConnection(GetConnectionString()))
@@ -255,14 +256,14 @@ namespace WcfKaluga
                     connection.Close();
 
                     if (result == null || DBNull.Value.Equals(result) || string.IsNullOrEmpty((string)result))
-                        return new Result<RollPack> { Message = Messages.PackageNotFound, ResultItem = null };
+                        return new Result<string> { Message = Messages.PackageNotFound, ResultItem = string.Empty };
 
-                    return new Result<RollPack> { Message = Messages.OK, ResultItem = new RollPack { RollPackNum = (string)result } };
+                    return new Result<string> { Message = Messages.OK, ResultItem =(string)result };
                 }
             }
             catch (SqlException)
             {
-                return new Result<RollPack> { Message = Messages.DatabaseError, ResultItem = null };
+                return new Result<string> { Message = Messages.DatabaseError, ResultItem = string.Empty };
             }
         }
 
